@@ -38,14 +38,13 @@ lista = [(x.split(";")[0],x.split(";")[1],x.split(";")[2]) for x in archivo.read
 libros = []
 
 for x in lista:
+    x = x.strip(" \r\n")
     libro = Libro(x[0],x[1],x[2])
     libros.append(libro)
 
 opcion = int(input("digite la opcion que desea realizar \n 1 si desea buscar por nombre del libro \n 2 si desea buscar por categoria del libro\n 3 si desea buscar por autor del libro\n"))
 if(opcion == 1 or opcion == 2 or opcion == 3):
     busqueda = raw_input("digite para empezar la busqueda\n")
-    if opcion == 3:
-        busqueda = busqueda +" \r\n"
     validacion = False
     while validacion == False:
         try:
