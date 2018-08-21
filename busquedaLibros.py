@@ -3,10 +3,10 @@ class Pila:
     """ Representa una pila con operaciones de apilar, desapilar y
         verificar si está vacía. """
 
-    def __init__(self,libros):
+    def __init__(self):
         """ Crea una pila vacía. """
         # La pila vacía se r{epresenta con una lista vacía
-        self.items=libros
+        self.items=[]
 
     def apilar(self, x):
         """ Agrega el elemento x a la pila. """
@@ -35,20 +35,20 @@ class Libro:
 archivo = open("libros.csv","r")
 lista = [(x.split(";")[0],x.split(";")[1],x.split(";")[2]) for x in archivo.readlines()]
 
-libros = []
 pila = Pila()
-
 for x in lista:
     libro = Libro(x[0],x[1],x[2].strip("\n").strip("\r").strip(" "))
-    libros.append(libro)
+    pila.apilar(libro)
 
 opcion = int(input("digite la opcion que desea realizar \n 1 si desea buscar por nombre del libro \n 2 si desea buscar por categoria del libro\n 3 si desea buscar por autor del libro\n"))
 if(opcion == 1 or opcion == 2 or opcion == 3):
     busqueda = raw_input("digite para empezar la busqueda\n")
+    if opcion == 3:
+        busqueda = busqueda +" \r\n"
     validacion = False
     while validacion == False:
         try:
-            ultimoLibro = libros.pop()
+            ultimoLibro = pila.desapilar()
             if(opcion == 1):
                 if(ultimoLibro.nombre == busqueda):
                     validacion = True
@@ -67,3 +67,4 @@ if(opcion == 1 or opcion == 2 or opcion == 3):
 
 else:
     print "opcion invalida"
+
