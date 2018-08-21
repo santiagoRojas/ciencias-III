@@ -32,7 +32,7 @@ class Estudiante:
         self.placa = placa
 
 validacion = True
-estudiantes = []
+cola = Cola()
 while validacion ==True:
 
     print "bienvenidos al sistema de asignacion de cupos de parqueadero de la universidad distrital \n recuerde que los cupos son limitados\n"
@@ -42,7 +42,7 @@ while validacion ==True:
     placa = raw_input("digite la placa del vehiculo\n")
 
     estudiante = Estudiante(nombre,codigo,placa)
-    estudiantes.append(estudiante)
+    cola.encolar(estudiante)
 
     opcion = raw_input("si desea seguir ingresando estudiantes escriba cualquier tecla, de lo contrario escriba 1 para proceguir con la asignacion de cupos")
     if opcion == '1':
@@ -51,7 +51,7 @@ cupos = int(input("cuantos cupos desea habilitar"))
 print "los siguientes estudiantes obtendran un cupo"
 for i in range(0,cupos):
     try:
-        estudianteActual = estudiantes.pop(0)
+        estudianteActual = cola.desencolar()
         print "estudiante numero ",i+1,"\n nombre: ",estudianteActual.nombre,"\n codigo: ",estudianteActual.codigo,"\n placa del vehiculo: ",estudianteActual.placa
     except IndexError:
         print "demasiados cupos, cola vacia"
