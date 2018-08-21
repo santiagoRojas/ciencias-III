@@ -36,10 +36,10 @@ archivo = open("libros.csv","r")
 lista = [(x.split(";")[0],x.split(";")[1],x.split(";")[2]) for x in archivo.readlines()]
 
 libros = []
+pila = Pila()
 
 for x in lista:
-    x = x.strip(" \r\n")
-    libro = Libro(x[0],x[1],x[2])
+    libro = Libro(x[0],x[1],x[2].strip("\n").strip("\r").strip(" "))
     libros.append(libro)
 
 opcion = int(input("digite la opcion que desea realizar \n 1 si desea buscar por nombre del libro \n 2 si desea buscar por categoria del libro\n 3 si desea buscar por autor del libro\n"))
