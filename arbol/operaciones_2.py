@@ -12,33 +12,15 @@ def convertir(lista, pila):
             pila.apilar(Nodo(lista[0]))
         return convertir(lista[1:],pila)
 
-a = None
-b = None
-c = None
 i = 0
+diccionario = dict()
 
 def evaluar(arbol):
-    if arbol.valor in "abc":
-        if arbol.valor == "a":
-            return a
-        if arbol.valor == "b":
-            return b
-        if arbol.valor == "c":
-            return c
+    if arbol.valor in "abcdefghijklmnopqrstuvwxyz":
+        return diccionario[arbol.valor]
     if arbol.valor == "=":
-        if (arbol.der).valor == "a":
-            global a
-            a = int(evaluar(arbol.izq))
-            return a
-        if (arbol.der).valor == "b":
-            global b
-            b = int(evaluar(arbol.izq))
-            return b
-        if (arbol.der).valor == "c":
-            global c
-            c = int(evaluar(arbol.izq))
-            return c
-
+        diccionario[arbol.der] = evaluar(arbol.izq)
+            return str(arbol.der)+"="+str(diccionario[arbol.der])
     if arbol.valor == "+":
         return evaluar(arbol.izq) + evaluar(arbol.der)
     if arbol.valor == "-":
