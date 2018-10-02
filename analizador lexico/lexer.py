@@ -1,16 +1,17 @@
 import ply.lex as lex
 
-tokens = [ 'NAME','NUMBER','PLUS','MINUS','TIMES','DIVIDE', 'EQUALS' ]
+tokens = [ 'VARIABLE','NUMERO','SUMA','RESTA','MULTIPLICACION','DIVISION', 'ASIGNACION','SALTOLINEA' ]
 
 t_ignore = ' \t'
-t_PLUS = r'\+'
-t_MINUS = r'-'
-t_TIMES = r'\*'
-t_DIVIDE = r'/'
-t_EQUALS = r':='
-t_NAME = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_SUMA = r'\+'
+t_RESTA= r'-'
+t_MULTIPLICACION = r'\*'
+t_DIVISION = r'/'
+t_ASIGNACION = r'='
+t_VARIABLE = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_SALTOLINEA = r'\n'
 
-def t_NUMBER(t):
+def t_NUMERO(t):
     r'\d+'
     t.value = int(t.value)
     return t
@@ -28,8 +29,8 @@ lectura = open("expresiones.in","r")
 a= 0
 for i in lectura.readlines():
     a= a+1
-    print "\n expresion",(a)
-    lex.input(i.rstrip('\n'))
+    print "\n expresion ",(a)
+    lex.input(i)
     while True:
         tok = lex.token()
         if not tok: break
