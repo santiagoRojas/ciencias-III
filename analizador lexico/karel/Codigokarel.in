@@ -1,0 +1,26 @@
+iniciar-programa
+  iniciar-ejecucion
+    mientras no orientado-al-este hacer gira-izquierda;
+    mientras frente-libre hacer
+    inicio
+      coge-zumbador;
+      avanza;
+      si frente-bloqueado entonces
+      inicio
+        coge-zumbador;
+        repetir 2 veces gira-izquierda;
+        mientras frente-libre hacer avanza;
+        repetir 3 veces gira-izquierda;
+        si frente-bloqueada entonces
+        inicio
+          repetir 2 veces gira-izquierda;
+          mientras frente-libre hacer avanza;
+          mientras algun-zumbador-en-la-mochila hacer deja-zumbador;
+        apagate;
+      fin;
+      avanza;
+      repetir 3 veces gira-izquierda;
+      fin;
+    apagate;
+    esto-es-un-Error
+finalizar-programa
