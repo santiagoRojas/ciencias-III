@@ -1,0 +1,34 @@
+entity Persona {
+  nombre : string       // Nombre de la persona
+  apellido : string       // Apellido de la persona
+  direccion: Direccion    // It is defined by the Comment rule in the grammar
+  edad: integer        // integer and string are built-in objects
+  telefono : Telefono       // Nombre de la persona
+  correo : string       // mail de la persona
+  nuevo : bool
+}                     // See entity_test.py
+
+entity Direccion {
+  calle : string
+  ciudad : string
+  pais : string
+}
+
+entity Telefono {
+  indicador : string
+  numero : string
+}
+
+entity Conexion {
+  baseDeDatos : nameBD
+  usuario : user
+  contaseña : password
+}
+entity Personadao {
+  consultar : Persona
+  eliminar : Persona
+}
+entity Cajerodao {
+  consultar : string
+  eliminar : string
+}

@@ -1,0 +1,201 @@
+
+
+  {% if entity.name|capitalize == "Conexion"  %}
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class {{entity.name|capitalize}} {
+  static Connection conn;
+      public static Connection getConexion() throws ClassNotFoundException {
+
+          String driver = "org.postgresql.Driver";
+        {% for property in entity.properties %}
+          {% if property.type|javatype == "nameBD"  %}
+          String {{property.type|javatype}} = "jdbc:postgresql://localhost:5432/{{property.name}}";
+          {% elif property.type|javatype == "user"  %}
+          String {{property.type|javatype}} = "{{property.name}}";
+          {% elif property.type|javatype == "password"  %}
+          String {{property.type|javatype}} = "{{property.name}}";
+          {% endif %}
+        {% endfor %}
+
+          try {
+                  Class.forName(driver);
+                  conn = DriverManager.getConnection(nameBD, user, password);
+                  //Si la conexion fue realizada con exito, muestra el sgte mensaje.
+
+                  return conn;
+                  }
+                  //Si se produce una Excepcion y no nos podemos conectar, muestra el sgte. mensaje.
+          catch(SQLException e) {
+                  System.out.println("Se ha producido un error en la conexion a la base de datos Ejemplo! ");
+                  return null;
+              }
+          }
+  public static void cerrarConexion() {
+      try {
+          conn.close();
+      } catch (SQLException e) {
+          System.out.println("No se pudo cerrar la conexion");
+      }
+  }}
+
+{% elif entity.name|capitalize == "r'[a-zA-Z_][a-zA-Z0-9_]*-dao'" or entity.name|capitalize == "Personadao" or  entity.name|capitalize == "Cajerodao" %}
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class {{entity.name|capitalize}} {
+
+  private Connection con;
+    private Statement st;
+    private ResultSet rs;
+
+    public {{entity.name|capitalize}}() {
+        con = null;
+        st = null;
+        rs=null;
+    }
+
+  {% for property in entity.properties %}
+    {% if property.name == "consultar"  %}
+    {% if property is entity %}
+
+
+    public {{property.type.name|capitalize}} consultar(int id){
+        {{property.type.name|capitalize}} = null;
+        String consulta = "SELECT * FROM public.\"{{property.type.name|capitalize}} \n" +
+"WHERE \"id{{property.type.name|capitalize}}\" = "+id;
+        try {
+            con = Conexion.getConexion();
+            st = con.createStatement();
+            rs = st.executeQuery(consulta);
+            if(rs.next()){
+                {{property.type.name|capitalize}} = new {{property.type.name|capitalize}}();
+                {{Entity}}
+                {% for entidad in entity.ID %}
+                //recorrer las entidades que hay para sacar las variables y consultarlas
+                {% if entidad == property.type.name|capitalize  %}
+                {% for propiedad in entidad.properties %}
+                {{property.type.name|capitalize}}.set{{propiedad.name|capitalize}}(rs.get{{propiedad.type|javatype}}("{{property.name|capitalize}}"));
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+            }
+            st.close();
+            Conexion.cerrarConexion();
+        } catch (Exception e) {
+            System.err.println("No se pudo realizar la consulta");
+            return null;
+        }
+        return {{property.type.name|capitalize}};
+    }
+    {% else %}
+
+    public {{property.type}} consultar(int id){
+      {{property.type|javatype}} retorno;
+        String consulta = "SELECT * FROM public.\"/*nombreTabla*/ \n" +
+"WHERE \"/* idnombreTabla */\" = "+id;
+        try {
+            con = Conexion.getConexion();
+            st = con.createStatement();
+            rs = st.executeQuery(consulta);
+            if(rs.next()){
+
+                retorno = rs.get{{property.type|javatype}}("nombreAtributo");
+
+            }
+            st.close();
+            Conexion.cerrarConexion();
+        } catch (Exception e) {
+            System.err.println("No se pudo realizar la consulta");
+            return null;
+        }
+        return retorno;
+    }
+
+    {% endif %}
+
+    {% elif property.name == "eliminar"  %}
+    {% if property is entity %}
+    public boolean eliminar(int id) {
+
+      String eliminar = "DELETE FROM public.{{property.type.name|capitalize}} WHERE id{{property.type.name|capitalize}} = "+id;
+      try {
+          con = Conexion.getConexion();
+          st = con.createStatement();
+          st.executeUpdate(eliminar);
+          st.close();
+          Conexion.cerrarConexion();
+          return true;
+      } catch (SQLException e) {
+          System.out.println("No se puedo realizar la eliminacion");
+      }
+      return false;
+  }
+    {% else %}
+
+    public boolean eliminar({{property.type|javatype}} id) {
+
+      String eliminar = "DELETE FROM public."/*nombreTabla*/"
+	WHERE \"/*idnombreTabla*/\" = "+id;
+      try {
+          con = Conexion.getConexion();
+          st = con.createStatement();
+          st.executeUpdate(eliminar);
+          st.close();
+          Conexion.cerrarConexion();
+          return true;
+      } catch (SQLException e) {
+          System.out.println("No se puedo realizar la modificacion");
+      }
+      return false;
+  }
+
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+
+
+    {% else %}
+public class {{entity.name|capitalize}} {
+    {% for property in entity.properties %}
+    {% if property is entity %}
+      private {{property.type.name|capitalize}} {{property.name}};
+    {% else %}
+       private {{property.type|javatype}} {{property.name}};
+    {% endif %}
+  {% endfor %}
+
+  {% for property in entity.properties %}
+  {% if property is entity %}
+    public {{property.type.name|capitalize}} get{{property.name|capitalize}}(){
+      return this.{{property.name}};
+    }
+  {% else %}
+    public {{property.type}} get{{property.name|capitalize}}(){
+      return this.{{property.name}};
+    }
+  {% endif %}
+  {% endfor %}
+
+  {% for property in entity.properties %}
+    {% if property is entity %}
+      public void set{{property.name}}({{property.type.name|capitalize}} value){
+        this.{{property.name}} = value;
+      }
+    {% else %}
+      public void set{{property.name|capitalize}}({{property.type}} value){
+        this.{{property.name}} = value;
+      }
+    {% endif %}
+
+  {% endfor %}
+
+  }
+
+{% endif %}

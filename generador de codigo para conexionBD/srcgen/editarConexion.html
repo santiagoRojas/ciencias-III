@@ -1,0 +1,36 @@
+// template for add form view
+<div ng-controller="EditarConexionCtrl">
+  <div class="jumbotron text-center">
+  <h2>{{ title }}</h2>
+  <hr>
+  <p>{{ message }}</p>
+
+  <form name="ConexionForm" class="form-horizontal" ng-init="load(id)">
+    <div class="form-group">
+      <label for="baseDeDatos" class="col-sm-2 control-label">Basededatos</label>
+      <div class="col-sm-10">
+        <input name="baseDeDatos" type="text" ng-model="Conexion.baseDeDatos" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="usuario" class="col-sm-2 control-label">Usuario</label>
+      <div class="col-sm-10">
+        <input name="usuario" type="text" ng-model="Conexion.usuario" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="contaseña" class="col-sm-2 control-label">Contaseña</label>
+      <div class="col-sm-10">
+        <input name="contaseña" type="text" ng-model="Conexion.contaseña" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <input type="submit" ng-click="cancel()" value="Cancelar" class="btn btn-primary"/>
+        <input type="submit" ng-click="edit(id)" value="Guardar" class="btn btn-success"/>
+      </div>
+    </div>
+  </form>
+  <pre>Conexion = {{Conexion}} | json}}</pre>
+  </div>
+</div>
