@@ -1,12 +1,12 @@
 entity Persona {
-  nombre : string       // Nombre de la persona
-  apellido : string       // Apellido de la persona
-  direccion: Direccion    // It is defined by the Comment rule in the grammar
-  edad: integer        // integer and string are built-in objects
-  telefono : Telefono       // Nombre de la persona
-  correo : string       // mail de la persona
+  nombre : string      
+  apellido : string
+  direccion: Direccion
+  edad: integer
+  telefono : Telefono
+  correo : string
   nuevo : bool
-}                     // See entity_test.py
+}
 
 entity Direccion {
   calle : string
@@ -24,11 +24,15 @@ entity Conexion {
   usuario : user
   contaseña : password
 }
-entity Personadao {
+entity DaoPersona {
   consultar : Persona
   eliminar : Persona
+  insertar : Persona
+  modificar : Persona
 }
-entity Cajerodao {
+entity DaoCajero {
   consultar : string
   eliminar : string
+  insertar : string
+  modificar : string
 }

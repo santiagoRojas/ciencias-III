@@ -1,0 +1,42 @@
+// template for add form view
+<div ng-controller="EditarDaocajeroCtrl">
+  <div class="jumbotron text-center">
+  <h2>{{ title }}</h2>
+  <hr>
+  <p>{{ message }}</p>
+
+  <form name="DaoCajeroForm" class="form-horizontal" ng-init="load(id)">
+    <div class="form-group">
+      <label for="consultar" class="col-sm-2 control-label">Consultar</label>
+      <div class="col-sm-10">
+        <input name="consultar" type="text" ng-model="DaoCajero.consultar" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="eliminar" class="col-sm-2 control-label">Eliminar</label>
+      <div class="col-sm-10">
+        <input name="eliminar" type="text" ng-model="DaoCajero.eliminar" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="insertar" class="col-sm-2 control-label">Insertar</label>
+      <div class="col-sm-10">
+        <input name="insertar" type="text" ng-model="DaoCajero.insertar" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="modificar" class="col-sm-2 control-label">Modificar</label>
+      <div class="col-sm-10">
+        <input name="modificar" type="text" ng-model="DaoCajero.modificar" class="form-control"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <input type="submit" ng-click="cancel()" value="Cancelar" class="btn btn-primary"/>
+        <input type="submit" ng-click="edit(id)" value="Guardar" class="btn btn-success"/>
+      </div>
+    </div>
+  </form>
+  <pre>Daocajero = {{DaoCajero}} | json}}</pre>
+  </div>
+</div>

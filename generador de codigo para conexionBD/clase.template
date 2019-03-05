@@ -43,11 +43,12 @@ public class {{entity.name|capitalize}} {
       }
   }}
 
-{% elif entity.name|capitalize == "r'[a-zA-Z_][a-zA-Z0-9_]*-dao'" or entity.name|capitalize == "Personadao" or  entity.name|capitalize == "Cajerodao" %}
+{% elif entity.name|capitalize == "r'Dao[a-zA-Z_][a-zA-Z0-9_]*'" or ((entity.name|capitalize)[0] == "D" and (entity.name|capitalize)[1] == "a" and (entity.name|capitalize)[2] == "o") %}
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 
 public class {{entity.name|capitalize}} {
 
@@ -76,9 +77,8 @@ public class {{entity.name|capitalize}} {
             rs = st.executeQuery(consulta);
             if(rs.next()){
                 {{property.type.name|capitalize}} = new {{property.type.name|capitalize}}();
-                {{Entity}}
-                {% for entidad in entity.ID %}
                 //recorrer las entidades que hay para sacar las variables y consultarlas
+                {% for entidad in entity.ID %}
                 {% if entidad == property.type.name|capitalize  %}
                 {% for propiedad in entidad.properties %}
                 {{property.type.name|capitalize}}.set{{propiedad.name|capitalize}}(rs.get{{propiedad.type|javatype}}("{{property.name|capitalize}}"));
@@ -106,7 +106,7 @@ public class {{entity.name|capitalize}} {
             rs = st.executeQuery(consulta);
             if(rs.next()){
 
-                retorno = rs.get{{property.type|javatype}}("nombreAtributo");
+                retorno = rs.get{{property.type|javatype}}("/*nombreAtributo*/");
 
             }
             st.close();
@@ -122,7 +122,7 @@ public class {{entity.name|capitalize}} {
 
     {% elif property.name == "eliminar"  %}
     {% if property is entity %}
-    public boolean eliminar(int id) {
+    public boolean eliminar{{property.type.name|capitalize}}(int id) {
 
       String eliminar = "DELETE FROM public.{{property.type.name|capitalize}} WHERE id{{property.type.name|capitalize}} = "+id;
       try {
@@ -139,10 +139,10 @@ public class {{entity.name|capitalize}} {
   }
     {% else %}
 
-    public boolean eliminar({{property.type|javatype}} id) {
+    public boolean eliminar({{property.type|javatype}} value) {
 
       String eliminar = "DELETE FROM public."/*nombreTabla*/"
-	WHERE \"/*idnombreTabla*/\" = "+id;
+	WHERE \"/*idNombreAtributo*/\" = "+value;
       try {
           con = Conexion.getConexion();
           st = con.createStatement();
@@ -155,6 +155,79 @@ public class {{entity.name|capitalize}} {
       }
       return false;
   }
+  {% endif %}
+
+  {% elif property.name == "insertar"  %}
+  {% if property is entity %}
+    public boolean agregar{{property.type.name|capitalize}}({{property.type.name|capitalize}} value) throws ClassNotFoundException{
+        String insertar = "INSERT INTO public.\"{{property.type.name|capitalize}}\"(\n" +
+"	?,?)\n" +
+"	VALUES (?,?)";
+        try {
+            con = Conexion.getConexion();
+            st = con.createStatement();
+            st.executeUpdate(insertar);
+            st.close();
+            Conexion.cerrarConexion();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("no se pudo realizar el agregado");
+        }
+        return false;
+}
+  {% else %}
+    public boolean agregar({{property.type|javatype}} value) throws ClassNotFoundException{
+        String insertar = "INSERT INTO public."/*nombreTabla*/"(\n" +
+"	?,?)\n" +
+"	VALUES (?,?)";
+        try {
+            con = Conexion.getConexion();
+            st = con.createStatement();
+            st.executeUpdate(insertar);
+            st.close();
+            Conexion.cerrarConexion();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("no se pudo realizar el agregado");
+        }
+        return false;
+}
+{% endif %}
+{% elif property.name == "modificar"  %}
+{% if property is entity %}
+  public boolean modificar{{property.type.name|capitalize}}(/*tipoAtributoCambiar*/ value,int id) throws ClassNotFoundException {
+          String script = "update \"{{property.type.name|capitalize}}\" set \"/*nombreAtributoCambiar*/\"= "+value+"  \n" +
+  "WHERE \"id{{property.type.name|capitalize}}\"="+id;
+          try {
+              con = Conexion.getConexion();
+              st = con.createStatement();
+              st.executeUpdate(script);
+              st.close();
+              Conexion.cerrarConexion();
+              return true;
+          } catch (SQLException e) {
+              System.out.println("No se puedo realizar la modificacion");
+          }
+          return false;
+      }
+
+{% else %}
+
+public boolean modificar({{property.type|javatype}} value,int id) throws ClassNotFoundException {
+        String script = "update \"/*nombreTabla*/\" set \"/*nombreAtributoCambiar*/\"= "+value+"  \n" +
+"WHERE \"/*idNombreAtributo*/\"="+id;
+        try {
+            con = Conexion.getConexion();
+            st = con.createStatement();
+            st.executeUpdate(script);
+            st.close();
+            Conexion.cerrarConexion();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("No se puedo realizar la modificacion");
+        }
+        return false;
+    }
 
     {% endif %}
     {% endif %}
